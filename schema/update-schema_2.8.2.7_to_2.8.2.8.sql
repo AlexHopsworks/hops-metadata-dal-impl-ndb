@@ -80,3 +80,51 @@ ALTER TABLE `hdfs_on_going_sub_tree_ops` ADD COLUMN `async_lock_recovery_time` b
 ALTER TABLE `hdfs_on_going_sub_tree_ops` ADD COLUMN `user` varchar(256) NOT NULL DEFAULT '';
 
 ALTER TABLE `hdfs_on_going_sub_tree_ops` ADD COLUMN `inode_id` bigint(20) NOT NULL DEFAULT '0';
+
+CREATE TABLE `hdfs_file_provenance_log` (
+  `inode_id` bigint(20) NOT NULL,
+  `inode_operation` varchar(45) NOT NULL,
+  `io_logical_time` int(11) NOT NULL,
+  `io_timestamp` bigint(20) NOT NULL,
+  `io_app_id` varchar(45) NOT NULL,
+  `io_user_id` int(11) NOT NULL,
+  `i_partition_id` bigint(20) NOT NULL,
+  `project_i_id` bigint(20) NOT NULL,
+  `dataset_i_id` bigint(20) NOT NULL,
+  `parent_i_id` bigint(20) NOT NULL,
+  `i_name` varchar(255) NOT NULL,
+  `project_name` varchar(255) NOT NULL,
+  `dataset_name` varchar(255) NOT NULL,
+  `i_p1_name` varchar(255) NOT NULL,
+  `i_p2_name` varchar(255) NOT NULL,
+  `i_parent_name` varchar(255) NOT NULL,
+  `io_user_name` varchar(100) NOT NULL,
+  `i_xattr_name` varchar(255) NOT NULL,
+  `io_logical_time_batch` int(11) NOT NULL,
+  `io_timestamp_batch` bigint(20) NOT NULL,
+  `ds_logical_time` int(11) NOT NULL,
+  PRIMARY KEY (`inode_id`, `inode_operation`, `io_logical_time`, `io_timestamp`, `io_app_id`, `io_user_id`),
+  KEY `io_logical_time` (`io_logical_time` ASC)
+) ENGINE=ndbcluster DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs;
+
+CREATE TABLE `yarn_app_provenance_log` (
+  `id` varchar(45) NOT NULL,
+  `state` varchar(45) NOT NULL,
+  `timestamp` bigint(20) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `user` varchar(100) NOT NULL,
+  `submit_time` bigint(20) NOT NULL,
+  `start_time` bigint(20) NOT NULL,
+  `finish_time` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`,`state`,`timestamp`)
+) ENGINE=ndbcluster DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs;
+
+CREATE TABLE `hdfs_file_provenance_xattrs_buffer` (
+  `inode_id` bigint(20) NOT NULL,
+  `namespace` tinyint(4) NOT NULL,
+  `name` varchar(255) COLLATE latin1_general_cs NOT NULL,
+  `inode_logical_time` int(11) NOT NULL,
+  `value` varchar(13500) COLLATE latin1_general_cs DEFAULT '',
+  PRIMARY KEY (`inode_id`,`namespace`,`name`,`inode_logical_time`),
+  INDEX `xattr_versions` (`inode_id`, `namespace`, `name` ASC)
+) ENGINE=ndbcluster DEFAULT CHARSET=latin1 COLLATE=latin1_general_cs;
