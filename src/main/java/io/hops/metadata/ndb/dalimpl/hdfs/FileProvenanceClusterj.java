@@ -140,6 +140,26 @@ public class FileProvenanceClusterj implements TablesDef.FileProvenanceTableDef,
     String getP2Id();
   
     void setP2Id(Long p2Id);
+  
+    @Column(name = P3_NAME)
+    String getP3Name();
+  
+    void setP3Name(String p3Name);
+    
+    @Column(name = P3_INODE_ID)
+    String getP3Id();
+  
+    void setP3Id(Long p3Id);
+  
+    @Column(name = P4_NAME)
+    String getP4Name();
+  
+    void setP4Name(String p4Name);
+    
+    @Column(name = P4_INODE_ID)
+    String getP4Id();
+  
+    void setP4Id(Long p4Id);
     
     @Column(name = PARENT_NAME)
     String getParentName();
